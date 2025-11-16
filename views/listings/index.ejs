@@ -1,38 +1,50 @@
 <% layout("/layouts/boilerplate")%> 
 
 <style>
-  #filters{
-    display:flex;
-    flex-wrap: wrap;
+  #filters {
+    display: flex;
+    flex-wrap: nowrap;       /* prevent wrapping */
     align-items: center;
-    margin-bottom: 1rem;
+    gap: 1rem;
   }
-  
-  .filter{
-    margin-top: 1rem;
+
+  .filter {
+    flex: 1 1 auto;          /* allow to shrink */
     text-align: center;
-    margin-right: 2rem;
+    margin-top: 1rem;
     opacity: 0.7;
+    min-width: 60px;         /* avoid being too tiny */
   }
-  .filter:hover{
-    opacity:1;
+
+  .filter:hover {
+    opacity: 1;
     cursor: pointer;
   }
- 
-   .filter p {
+
+  .filter p {
     font-size: 0.9rem;
     margin-top: 0.3rem;
   }
 
-  .tax-info{
-    display:none;
+  .tax-info {
+    display: none;
   }
-  .tax-toggle{
-    border: 1px,solid,black;
+
+  .tax-toggle {
+    border: 1px solid black;   /* fixed syntax */
     border-radius: 1rem;
     height: 3.5rem;
     padding: 1rem;
-    margin-left: 2.5rem;
+    flex-shrink: 0;            /* prevents toggle from shrinking */
+    display: flex;
+    align-items: center;
+  }
+
+  /* Optional responsiveness - wrap filters if screen too small */
+  @media (max-width: 600px) {
+    #filters {
+      flex-wrap: wrap;
+    }
   }
 </style>
 
@@ -59,7 +71,7 @@
     </div>
      <div class="filter">
       <div><i class="fa-solid fa-person-swimming"></i></div>
-      <p>Amazing Pools </p>
+      <p>Amazing Pools</p>
     </div>
      <div class="filter">
       <div><i class="fa-solid fa-campground"></i></div>
@@ -73,41 +85,31 @@
       <div><i class="fa-solid fa-snowflake"></i></div>
       <p>Arctic</p>
     </div>
-     
-    
+
     <div class="tax-toggle">
-    <div class="form-check-reverse form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-  <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-  </div>
-  </div>
-    
+      <div class="form-check-reverse form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+        <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+      </div>
+    </div>
 </div>
 
-   
-</div>
-    <!-- <h3>All Listings</h3> -->
-    <!-- <form method="GET" action="/listings/newpost">
-        <button>Create new List</button>
-    </form> -->
-    <div class="container mt-3">
-    <div class=" row row-cols-lg-3 row-cols-md-3 row-cols-sm-3 mt-2 ">
-    <%for(let list of allListings){%>
-        <a href="/listings/<%=list._id%>" class="listing-link">
-    <div class="card col listing-card" >
-  <img src="<%=list.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem">
-  <div class="card-img-overlay"></div>
-  <div class="card-body">
-    <p class="card-text"><b><%=list.title%></b> <br>
-    &#8377;<%=list.price.toLocaleString("en-IN")%><i class="tax-info">&nbsp;&nbsp;+18% GST</i></p>
-    
+<div class="container mt-3">
+  <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-3 mt-2">
+    <% for (let list of allListings) { %>
+      <a href="/listings/<%= list._id %>" class="listing-link">
+        <div class="card col listing-card">
+          <img src="<%= list.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem">
+          <div class="card-img-overlay"></div>
+          <div class="card-body">
+            <p class="card-text"><b><%= list.title %></b> <br>
+            &#8377;<%= list.price.toLocaleString("en-IN") %><i class="tax-info">&nbsp;&nbsp;+18% GST</i></p>
+          </div>
+        </div>
+      </a>
+    <% } %>
   </div>
 </div>
-
-</a>
-    <%}%>
-   </div> 
-   </div>
 
 <script>
   const taxswitch = document.getElementById("switchCheckDefault");
@@ -116,14 +118,7 @@
     const taxinfo = document.getElementsByClassName("tax-info");
 
     for (let info of taxinfo) {
-      if (taxswitch.checked) {
-        info.style.display = "inline";
-      } else {
-        info.style.display = "none";
-      }
+      info.style.display = taxswitch.checked ? "inline" : "none";
     }
   });
 </script>
-git add .
-git commit -m "Updated code after fixes"
-
